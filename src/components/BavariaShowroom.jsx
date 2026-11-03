@@ -291,38 +291,15 @@ export default function BavariaShowroom() {
     >
       {/* 1. TOP ECOSYSTEM BAR */}
       <div className="w-full bg-[#050608] border-b border-white/10 px-4 sm:px-8 py-2 text-[11px] text-[#9CA3AF]">
-        <div className="max-w-[1380px] mx-auto flex flex-wrap items-center justify-between gap-2">
+        <div className="max-w-[1380px] mx-auto flex items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#0078D6]" />
             <span className="tracking-[0.14em] uppercase text-white/80">
               BAVARIA MOTOR HOUSE — INDEPENDENT PREMIUM BMW SALON • VIETNAM
             </span>
           </div>
-
-          <div className="flex items-center gap-4 ml-auto">
-            <span className="hidden md:inline text-white/40">
-              AutoLead Systems Ecosystem
-            </span>
-            <div className="flex items-center gap-3">
-              <a
-                href="http://localhost:5173/#crm"
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-1 text-[#60A5FA] hover:text-white transition-colors font-medium cursor-pointer"
-              >
-                <span>Mở AutoLead CRM (Xem Lead Đồng Bộ)</span>
-                <ArrowUpRight className="w-3.5 h-3.5" />
-              </a>
-              <span className="text-white/20">|</span>
-              <a
-                href="http://localhost:5173/#hero"
-                target="_blank"
-                rel="noreferrer"
-                className="text-white/60 hover:text-white transition-colors cursor-pointer"
-              >
-                AutoLead B2B Sale Page
-              </a>
-            </div>
+          <div className="hidden sm:flex items-center gap-2 text-white/40 text-[10px] tracking-wider uppercase font-mono">
+            <span>Official Dealer Simulator</span>
           </div>
         </div>
       </div>
