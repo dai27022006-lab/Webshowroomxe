@@ -11,11 +11,17 @@ import {
 import { BAVARIA_VEHICLES } from '../data/bavariaVehicles';
 
 const SUGGESTED_QUESTIONS = [
-  'Tư vấn mẫu BMW phù hợp cho gia đình',
-  'So sánh BMW X5 và BMW X7',
-  'Tư vấn sedan hạng sang cho doanh nhân',
-  'Gợi ý dòng BMW thể thao hiệu năng cao',
-  'Đặt lịch lái thử BMW tại showroom'
+  '🚗 Tư vấn xe BMW phù hợp cho gia đình',
+  '💳 Chính sách trả góp & Lãi suất vay',
+  '🛡️ Gói bảo hành 5 năm & Bảo dưỡng BSI',
+  '⏱️ Thời gian giao xe & Xe có sẵn giao ngay',
+  '📝 Thủ tục đăng ký lái thử tận nơi',
+  '⚖️ So sánh BMW X5 và BMW X7',
+  '👔 Sedan doanh nhân: 5 Series & 7 Series',
+  '⚡ Tìm hiểu xe thuần điện BMW i7',
+  '🏁 Dòng thể thao hiệu năng cao M3 & M4',
+  '💰 Chi phí lăn bánh & Ưu đãi trước bạ',
+  '🎯 Tư vấn chọn xe theo mức ngân sách'
 ];
 
 function buildConciergeReply(rawQuery) {
@@ -31,30 +37,148 @@ function buildConciergeReply(rawQuery) {
   const vm3 = BAVARIA_VEHICLES.find((v) => v.id === 'bmw-m3-comp-g80');
   const vz4 = BAVARIA_VEHICLES.find((v) => v.id === 'bmw-z4-m40i-g29');
 
+  // 1. Trả góp & Hỗ trợ tài chính / Ngân hàng / Lãi suất
   if (
-    (q.includes('x5') && q.includes('x7')) ||
-    (q.includes('so sánh') && (q.includes('suv') || q.includes('gầm cao')))
+    q.includes('trả góp') ||
+    q.includes('vay') ||
+    q.includes('ngân hàng') ||
+    q.includes('lãi suất') ||
+    q.includes('tài chính') ||
+    q.includes('hồ sơ vay') ||
+    q.includes('bảng tính')
   ) {
     return {
-      text: `Tại **Bavaria Motor House**, cả **${vx5.shortName}** và **${vx7.shortName}** đều sử dụng động cơ 3.0L I6 TwinPower Turbo kết hợp Mild-Hybrid 48V (381 HP / 540 Nm) và hệ dẫn động xDrive, nhưng hướng đến hai nhu cầu sử dụng khác biệt:\n\n• **${vx5.name}** (*${vx5.priceFormatted}*): Cấu hình **5 chỗ**, kích thước linh hoạt trong phố, tăng tốc 0–100 km/h trong 5,4 giây — lý tưởng nếu Quý khách yêu thích tự cầm lái hàng ngày.\n• **${vx7.name}** (*${vx7.priceFormatted}*): Cấu hình **7 chỗ Full-Size** với 3 hàng ghế rộng rãi, hệ thống treo khí nén 2 trục êm ái và cụm đèn pha lê Swarovski Iconic Glow — hoàn hảo cho gia đình đa thế hệ hoặc di chuyển đường dài.`,
+      text: `**CHÍNH SÁCH MUA XE TRẢ GÓP & TÀI CHÍNH TẠI BAVARIA MOTOR HOUSE:**\n\n• **Tỷ lệ tài trợ**: Hỗ trợ vay lên đến **80% – 85%** giá trị xe đối với khách hàng cá nhân và doanh nghiệp.\n• **Vốn đối ứng ban đầu**: Quý khách chỉ cần chuẩn bị trước từ **15% – 20%** (Ví dụ: **BMW 530i** trả trước từ ~520 triệu VNĐ, **BMW X5** trả trước từ ~830 triệu VNĐ).\n• **Lãi suất ưu đãi**: Gói liên kết đặc quyền độc quyền với Vietcombank, Techcombank, Shinhan Bank... chỉ từ **6.9% – 7.5%/năm** cố định.\n• **Thời hạn vay linh hoạt**: Từ **1 đến 8 năm** (12 – 96 tháng) với phương thức trả nợ gốc giảm dần linh hoạt.\n• **Duyệt hồ sơ siêu tốc**: Phê duyệt hồ sơ trong **24 giờ**, hỗ trợ xử lý toàn bộ giấy tờ chứng minh thu nhập tận nơi.\n\nQuý khách hãy nhấn **Đặt lịch lái thử** bên dưới để nhận bảng dự toán dòng tiền trả góp chi tiết theo tháng!`,
+      recommendedModels: [v530i, vx5],
+      summaryContext:
+        'Khách hàng quan tâm chính sách vay trả góp ngân hàng và phương án tài chính qua BMW CONCIERGE.'
+    };
+  }
+
+  // 2. Bảo hành chính hãng & Gói bảo dưỡng BSI (BMW Service Inclusive)
+  if (
+    q.includes('bảo hành') ||
+    q.includes('bảo dưỡng') ||
+    q.includes('bsi') ||
+    q.includes('bảo trì') ||
+    q.includes('phụ tùng') ||
+    q.includes('dịch vụ bảo') ||
+    q.includes('chăm sóc xe') ||
+    q.includes('cứu hộ')
+  ) {
+    return {
+      text: `**CHÍNH SÁCH BẢO HÀNH & GÓI BẢO DƯỠNG ĐẶC QUYỀN (BMW SERVICE INCLUSIVE - BSI):**\n\n• **Chính sách bảo hành tiêu chuẩn**: **5 năm không giới hạn số km** cho toàn bộ xe xuất xưởng từ Bavaria Motor House.\n• **Gói bảo dưỡng định kỳ BSI**: Miễn phí trọn gói bảo dưỡng trong **5 năm hoặc 60.000 km**, bao gồm thay dầu động cơ chính hãng BMW TwinPower Turbo, cốc lọc nhớt, lọc gió điều hòa microfilter, bugi đánh lửa, thay dầu phanh định kỳ và kiểm tra an toàn toàn diện.\n• **Tiêu chuẩn kỹ thuật 111 điểm**: Mọi phương tiện đều vượt qua 111 hạng mục kiểm tra cơ điện tử khắt khe trước khi bàn giao.\n• **Cứu hộ khẩn cấp BMW Roadside Assistance**: Hỗ trợ di động 24/7 trên toàn lãnh thổ Việt Nam suốt thời hạn bảo hành.`,
+      recommendedModels: [vx5, v750e],
+      summaryContext:
+        'Khách hàng tìm hiểu chế độ bảo hành 5 năm và gói bảo dưỡng định kỳ BSI qua BMW CONCIERGE.'
+    };
+  }
+
+  // 3. Thời gian giao xe & Tình trạng xe có sẵn
+  if (
+    q.includes('giao xe') ||
+    q.includes('có sẵn') ||
+    q.includes('sẵn xe') ||
+    q.includes('nhận xe') ||
+    q.includes('khi nào có') ||
+    q.includes('giao ngay') ||
+    q.includes('thời gian đặt')
+  ) {
+    return {
+      text: `**TÌNH TRẠNG XE CÓ SẴN & THỜI GIAN BÀN GIAO TẠI SALON:**\n\n• **Xe có sẵn giao ngay (trong 3 – 5 ngày làm việc)**:\n  - **${vx5.name}**: Sẵn sàng màu Trắng Mineral White & Đen Carbon Black.\n  - **${v530i.name}**: Sẵn sàng màu Xám Brooklyn Grey & Xanh Phytonic Blue.\n  - **${vx7.name}**: Sẵn sàng giao ngay phiên bản 7 chỗ Full-Size.\n• **Xe cá nhân hóa BMW Individual & Dòng M Performance**:\n  - **${vm4.name}**, **${v750e.name}**, **${vi7.name}**: Thời gian hoàn thiện thủ tục bấm biển và chuẩn bị xe từ **10 – 20 ngày**.\n• **Đặc quyền bàn giao VIP**: Hỗ trợ bấm biển số trọn gói trong ngày và tổ chức lễ bàn giao riêng tư (VIP Delivery Ceremony) tại salon hoặc vận chuyển xe bằng xe lồng kín về tận tư gia của Quý khách.`,
+      recommendedModels: [vx5, vx7, v530i],
+      summaryContext:
+        'Khách hàng kiểm tra danh sách xe có sẵn giao ngay và thời gian bàn giao xe tại salon.'
+    };
+  }
+
+  // 4. Chi phí lăn bánh & Biểu phí trước bạ / Ưu đãi
+  if (
+    q.includes('lăn bánh') ||
+    q.includes('ra biển') ||
+    q.includes('trước bạ') ||
+    q.includes('biển số') ||
+    q.includes('khuyến mãi') ||
+    q.includes('ưu đãi') ||
+    q.includes('tổng chi phí')
+  ) {
+    return {
+      text: `**DỰ TOÁN CHI PHÍ LĂN BÁNH XE BMW TẠI VIỆT NAM:**\n\nChi phí lăn bánh hoàn thiện một mẫu xe BMW bao gồm:\n1. **Giá bán niêm yết** (đã bao gồm VAT 10%).\n2. **Lệ phí trước bạ**: 10% (TP.HCM, tỉnh) hoặc 12% (Hà Nội).\n3. ⭐ **ĐẶC BIỆT DÀNH CHO XE THUẦN ĐIỆN (${vi7.shortName})**: Được **MIỄN 100% LỆ PHÍ TRƯỚC BẠ** theo chính sách của Chính Phủ — Quý khách tiết kiệm trực tiếp hơn **720.000.000 – 860.000.000 VNĐ** tiền mặt!\n4. **Phí biển số**: 20.000.000 VNĐ (HN & TP.HCM) hoặc 1.000.000 VNĐ (các tỉnh).\n5. **Bảo hiểm & Phí đường bộ**: Phí bảo trì đường bộ (1.560.000 VNĐ/năm), bảo hiểm TNDS và bảo hiểm vật chất thân xe chính hãng (1.1% – 1.3%).\n\nQuý khách hãy nhấn **Đặt lịch lái thử** bên dưới để nhận file báo giá lăn bánh chi tiết cho tỉnh/thành phố của mình!`,
+      recommendedModels: [vi7, v530i, vx5],
+      summaryContext:
+        'Khách hàng yêu cầu bảng dự toán chi phí lăn bánh và ưu đãi thuế trước bạ qua BMW CONCIERGE.'
+    };
+  }
+
+  // 5. Tư vấn theo ngân sách đầu tư
+  if (
+    q.includes('ngân sách') ||
+    q.includes('dưới 4') ||
+    q.includes('4 đến') ||
+    q.includes('4-6') ||
+    q.includes('trên 6') ||
+    q.includes('tầm tiền') ||
+    q.includes('khoảng tiền') ||
+    q.includes('bao nhiêu tiền')
+  ) {
+    return {
+      text: `**GỢI Ý MẪU XE BMW PHÙ HỢP THEO MỨC NGÂN SÁCH ĐẦU TƯ:**\n\n• **Dưới 4 Tỷ VNĐ**:\n  - **${v530i.name}** (*${v530i.priceFormatted}*): Sedan doanh nhân thế hệ mới G60, khoang lái kỹ thuật số Curved Display.\n  - **${vz4.name}** (*${vz4.priceFormatted}*): Mui trần thể thao cá tính 340 HP.\n\n• **Từ 4 Tỷ – 6 Tỷ VNĐ**:\n  - **${vx5.name}** (*${vx5.priceFormatted}*): SAV 5 chỗ gia đình đầm chắc, động cơ Mild-Hybrid 381 HP.\n  - **${vx7.name}** (*${vx7.priceFormatted}*): Flagship SAV 7 chỗ Full-Size siêu êm ái.\n  - **${vm3.name}** (*${vm3.priceFormatted}*): Sedan hiệu năng cao 510 HP thuần chất đua xe.\n  - **${v840i.name}** (*${v840i.priceFormatted}*): Gran Coupé 4 cửa quyến rũ.\n\n• **Trên 6 Tỷ VNĐ**:\n  - **${v750e.name}** (*${v750e.priceFormatted}*): Sedan Plug-in Hybrid thượng lưu dành cho Chủ tịch.\n  - **${vi7.name}** (*${vi7.priceFormatted}*): Đỉnh cao sedan thuần điện 544 HP siêu tĩnh lặng.\n  - **${vm4.name}** (*${vm4.priceFormatted}*): Siêu phẩm Coupé hiệu năng cao M Power.`,
+      recommendedModels: [v530i, vx5, v750e],
+      summaryContext:
+        'Khách hàng được tư vấn danh mục xe BMW phù hợp theo các khung ngân sách đầu tư.'
+    };
+  }
+
+  // 6. Thủ tục đăng ký lái thử / Lái thử tận nhà
+  if (
+    (q.includes('lái thử') || q.includes('test drive') || q.includes('chạy thử')) &&
+    !q.includes('x5') &&
+    !q.includes('x7')
+  ) {
+    return {
+      text: `**DỊCH VỤ ĐĂNG KÝ LÁI THỬ CAO CẤP TẠI BAVARIA MOTOR HOUSE:**\n\n• **100% Miễn phí & Độc quyền**: Quý khách có thể lựa chọn trải nghiệm trực tiếp tại **Showroom** hoặc yêu cầu chuyên viên đưa xe đến tận **Nhà riêng / Cơ quan**.\n• **Thủ tục đơn giản**: Quý khách chỉ cần chuẩn bị **Giấy phép lái xe (GPLX) hạng B1 hoặc B2** còn hạn sử dụng.\n• **Đội ngũ chuyên viên hỗ trợ**: Mỗi buổi lái thử đều có Chuyên gia sản phẩm (BMW Product Genius) đồng hành hướng dẫn chi tiết các tính năng như Cruise Control thông minh, hỗ trợ lùi xe tự động Reversing Assistant và chế độ Sport Boost.\n• **Chuẩn bị chu đáo**: Xe lái thử luôn được kiểm định an toàn, vệ sinh khử khuẩn và phục vụ nước uống cao cấp.\n\nQuý khách vui lòng chọn mẫu xe mong muốn bên dưới và nhấn **Đặt lịch lái thử** để đặt giờ hẹn phù hợp nhất!`,
+      recommendedModels: [vx5, v750e, vm4],
+      summaryContext:
+        'Khách hàng tìm hiểu quy trình và yêu cầu đặt lịch lái thử xe BMW tận nơi.'
+    };
+  }
+
+  // 7. So sánh X5 và X7
+  if (
+    (q.includes('x5') && q.includes('x7')) ||
+    (q.includes('so sánh') && (q.includes('suv') || q.includes('gầm cao') || q.includes('sav')))
+  ) {
+    return {
+      text: `Tại **Bavaria Motor House**, cả **${vx5.shortName}** và **${vx7.shortName}** đều sử dụng động cơ 3.0L I6 TwinPower Turbo kết hợp Mild-Hybrid 48V (381 HP / 540 Nm) và hệ dẫn động 4 bánh toàn thời gian xDrive, nhưng hướng đến hai phong cách sử dụng riêng biệt:\n\n• **${vx5.name}** (*${vx5.priceFormatted}*): Cấu hình **5 chỗ**, kích thước linh hoạt trong phố, tăng tốc 0–100 km/h trong 5,4 giây — lý tưởng nếu Quý khách yêu thích tự cầm lái hàng ngày và những chuyến dã ngoại cuối tuần.\n• **${vx7.name}** (*${vx7.priceFormatted}*): Cấu hình **7 chỗ Full-Size** với 3 hàng ghế rộng rãi cho người lớn, hệ thống treo khí nén 2 trục êm ái tuyệt đối, cửa sổ trời Panorama Sky Lounge 15.000 điểm sáng và cụm đèn pha lê Swarovski Iconic Glow — hoàn hảo cho gia đình đa thế hệ hoặc di chuyển đường dài cùng đối tác.`,
       recommendedModels: [vx7, vx5],
       summaryContext:
         'Khách hàng đã so sánh chi tiết giữa BMW X5 (G05 LCI) và BMW X7 (G07 LCI) qua BMW CONCIERGE.'
     };
   }
 
+  // 8. Đối chiếu 5 Series vs 7 Series
   if (
     (q.includes('5 series') || q.includes('530i')) &&
-    (q.includes('7 series') || q.includes('750e') || q.includes('i7'))
+    (q.includes('7 series') || q.includes('750e'))
   ) {
     return {
-      text: `Dưới đây là điểm khác biệt cốt lõi giữa hai dòng sedan doanh nhân tại salon:\n\n• **${v530i.name}** (*${v530i.priceFormatted}*): Thế hệ G60 hoàn toàn mới, động cơ 2.0L Mild-Hybrid (258 HP), dẫn động cầu sau RWD lanh lẹ, phù hợp với doanh nhân trẻ thường xuyên tự cầm lái.\n• **${v750e.name}** (*${v750e.priceFormatted}*): Sedan đầu bảng G70, truyền động Plug-in Hybrid 489 HP, treo khí nén 2 trục, cửa đóng/mở tự động và hàng ghế thương gia **Executive Lounge** — chuẩn mực dành cho Chủ tịch và ngoại giao cấp cao.`,
+      text: `Dưới đây là điểm khác biệt cốt lõi giữa hai dòng sedan doanh nhân tiêu biểu tại salon:\n\n• **${v530i.name}** (*${v530i.priceFormatted}*): Thế hệ G60 hoàn toàn mới, động cơ 2.0L Mild-Hybrid (258 HP), dẫn động cầu sau RWD lanh lẹ, khoang lái số BMW Curved Display kết hợp thanh tương tác Interaction Bar — phù hợp với doanh nhân trẻ năng động thường xuyên tự cầm lái.\n• **${v750e.name}** (*${v750e.priceFormatted}*): Sedan đầu bảng G70, truyền động Plug-in Hybrid 489 HP, treo khí nén 2 trục, cửa đóng/mở tự động, màn hình rạp chiếu Theater Screen 31.3 inch 8K và hàng ghế thương gia **Executive Lounge** — chuẩn mực tối thượng dành cho Chủ tịch và lãnh đạo cấp cao.`,
       recommendedModels: [v750e, v530i],
       summaryContext:
         'Khách hàng đã đối chiếu giữa BMW 530i M Sport (G60) và BMW 750e xDrive (G70) qua BMW CONCIERGE.'
     };
   }
 
+  // 9. Xe thuần điện BMW i7
+  if (q.includes('i7') || q.includes('thuần điện') || q.includes('xe điện') || q.includes('electric')) {
+    return {
+      text: `**${vi7.name}** (*${vi7.priceFormatted}*) là mẫu sedan hạng sang đầu bảng thuần điện biểu tượng của BMW tại Bavaria Motor House:\n\n• **Hệ truyền động**: 2 mô-tơ điện công suất cực đại **544 HP**, mô-men xoắn **745 Nm**, dẫn động 4 bánh xDrive.\n• **Vận hành**: Tăng tốc 0–100 km/h trong **4,7 giây** trong sự tĩnh lặng tuyệt đối.\n• **Dung lượng pin & Tầm vận hành**: Bộ pin 105.7 kWh cho tầm di chuyển lên tới **590 – 625 km** cho mỗi lần sạc đầy (chuẩn WLTP).\n• **Đặc quyền tài chính**: Được **MIỄN 100% lệ phí trước bạ** theo quy định nhà nước, tiết kiệm hơn 700 triệu VNĐ lăn bánh.\n• **Khoang thương gia**: Trang bị màn hình BMW Theater Screen 31.3 inch độ phân giải 8K gập từ trần xe kết hợp hệ thống âm thanh vòm 4D Bowers & Wilkins Diamond 36 loa.\n\nQuý khách hãy nhấn **Đặt lịch lái thử** bên dưới để trải nghiệm ngay mẫu sedan tương lai này!`,
+      recommendedModels: [vi7, v750e],
+      summaryContext: `Khách hàng tìm hiểu chuyên sâu về mẫu sedan thuần điện đầu bảng ${vi7.name}.`
+    };
+  }
+
+  // 10. Xe gia đình (SUV / SAV 5 chỗ & 7 chỗ)
   if (
     q.includes('gia đình') ||
     q.includes('7 chỗ') ||
@@ -66,41 +190,33 @@ function buildConciergeReply(rawQuery) {
     const primary = q.includes('x5') && !q.includes('x7') ? vx5 : vx7;
     const secondary = primary.id === vx7.id ? vx5 : vx7;
     return {
-      text: `Với nhu cầu phục vụ **gia đình cao cấp** và những chuyến hành trình dài, **BMW CONCIERGE** trân trọng đề xuất 2 mẫu SAV đang trưng bày tại Bavaria Motor House:\n\n1. **${primary.name}** — Giá tham khảo: **${primary.priceFormatted}**\n   • Cấu hình: ${primary.seatingCapacity} | Động cơ: ${primary.engine}\n   • Điểm nổi bật: ${primary.summary}\n\n2. **${secondary.name}** — Giá tham khảo: **${secondary.priceFormatted}**\n   • Cấu hình: ${secondary.seatingCapacity} | Động cơ: ${secondary.engine}\n\nQuý khách có thể đặt lịch trải nghiệm thực tế hàng ghế và cảm giác lái ngay tại salon.`,
+      text: `Với nhu cầu phục vụ **gia đình cao cấp** và những hành trình nghỉ dưỡng dài ngày, **BMW CONCIERGE** trân trọng đề xuất 2 mẫu SAV hàng đầu đang trưng bày tại Bavaria Motor House:\n\n1. **${primary.name}** — Giá tham khảo: **${primary.priceFormatted}**\n   • Cấu hình: ${primary.seatingCapacity} | Động cơ: ${primary.engine}\n   • Điểm nổi bật: ${primary.summary}\n\n2. **${secondary.name}** — Giá tham khảo: **${secondary.priceFormatted}**\n   • Cấu hình: ${secondary.seatingCapacity} | Động cơ: ${secondary.engine}\n\nQuý khách có thể đặt lịch trải nghiệm thực tế không gian các hàng ghế và cảm giác lái ngay tại salon hoặc tại nhà.`,
       recommendedModels: [primary, secondary],
       summaryContext: `Khách hàng quan tâm dòng SUV gia đình (${primary.shortName} & ${secondary.shortName}) qua BMW CONCIERGE.`
     };
   }
 
+  // 11. Doanh nhân & Sedan
   if (
     q.includes('doanh nhân') ||
     q.includes('chủ tịch') ||
     q.includes('sedan') ||
     q.includes('7 series') ||
     q.includes('750e') ||
-    q.includes('i7') ||
-    q.includes('điện') ||
     q.includes('5 series') ||
     q.includes('530i') ||
     q.includes('8 series') ||
     q.includes('840i')
   ) {
-    if (q.includes('i7') || q.includes('thuần điện') || q.includes('xe điện')) {
-      return {
-        text: `**${vi7.name}** (*${vi7.priceFormatted}*) là mẫu sedan hạng sang đầu bảng thuần điện tại Bavaria Motor House:\n\n• **Hệ truyền động**: ${vi7.engine}\n• **Tăng tốc 0–100 km/h**: ${vi7.acceleration} | **Quãng đường**: ${vi7.fuelConsumption}\n• **Không gian**: Khoang thương gia Executive Lounge kết hợp âm thanh Bowers & Wilkins và hiệu ứng âm thanh Hans Zimmer IconicSounds.\n\nQuý khách có muốn đặt lịch trải nghiệm sự tĩnh lặng tuyệt đối của **BMW i7** tại showroom không?`,
-        recommendedModels: [vi7, v750e],
-        summaryContext: `Khách hàng tìm hiểu chuyên sâu về mẫu sedan thuần điện đầu bảng ${vi7.name}.`
-      };
-    }
-
     return {
-      text: `Dành cho **doanh nhân & lãnh đạo**, Bavaria Motor House hiện trưng bày bộ ba sedan hạng sang tiêu biểu của BMW:\n\n• **${v750e.name}** (*${v750e.priceFormatted}*): Flagship G70 Plug-in Hybrid 489 HP, ghế thương gia Executive Lounge và đèn pha lê Swarovski.\n• **${vi7.name}** (*${vi7.priceFormatted}*): Đỉnh cao sedan thuần điện 544 HP, vận hành siêu tĩnh lặng, phạm vi 590–625 km.\n• **${v530i.name}** (*${v530i.priceFormatted}*): Sedan doanh nhân thế hệ mới G60 năng động, trang bị BMW Interaction Bar và gói M Sport.`,
+      text: `Dành cho **doanh nhân & lãnh đạo**, Bavaria Motor House hiện trưng bày bộ ba sedan hạng sang tiêu biểu của BMW:\n\n• **${v750e.name}** (*${v750e.priceFormatted}*): Flagship G70 Plug-in Hybrid 489 HP, ghế thương gia Executive Lounge và đèn pha lê Swarovski.\n• **${vi7.name}** (*${vi7.priceFormatted}*): Đỉnh cao sedan thuần điện 544 HP, vận hành siêu tĩnh lặng, phạm vi 590–625 km, miễn 100% thuế trước bạ.\n• **${v530i.name}** (*${v530i.priceFormatted}*): Sedan doanh nhân thế hệ mới G60 năng động, trang bị BMW Interaction Bar và gói M Sport.`,
       recommendedModels: [v750e, v530i, vi7],
       summaryContext:
         'Khách hàng được tư vấn các dòng Sedan hạng sang cho doanh nhân (BMW 750e G70, BMW 530i G60, BMW i7).'
     };
   }
 
+  // 12. Thể thao & Hiệu năng cao (M Series)
   if (
     q.includes('thể thao') ||
     q.includes('hiệu năng') ||
@@ -110,18 +226,20 @@ function buildConciergeReply(rawQuery) {
     q.includes('mui trần') ||
     q.includes('coupé') ||
     q.includes('coupe') ||
-    q.includes('tốc độ')
+    q.includes('tốc độ') ||
+    q.includes('m power')
   ) {
     return {
-      text: `Nếu Quý khách tìm kiếm **DNA đua xe thuần khiết từ phân nhánh BMW M GmbH**, Bavaria Motor House hiện sở hữu hai tuyệt tác trang bị khối động cơ **S58 3.0L M TwinPower Turbo (510 HP / 650 Nm)**, tăng tốc 0–100 km/h chỉ trong **3,9 giây**:\n\n• **${vm4.name}** (*${vm4.priceFormatted}*): Thiết kế Coupé 2 cửa cơ bắp, mui sợi carbon CFRP trần, trưng bày mới 100%.\n• **${vm3.name}** (*${vm3.priceFormatted}*): Huyền thoại M Sedan 4 cửa 5 chỗ thực dụng (${vm3.conditionLabel}).\n• Ngoài ra còn có **${vz4.name}** (*${vz4.priceFormatted}*) mui trần 340 HP cho những buổi dạo phố cuối tuần.`,
+      text: `Nếu Quý khách tìm kiếm **DNA tốc độ thuần khiết từ phân nhánh BMW M GmbH**, Bavaria Motor House hiện sở hữu hai tuyệt tác trang bị khối động cơ **S58 3.0L M TwinPower Turbo (510 HP / 650 Nm)**, tăng tốc 0–100 km/h chỉ trong **3,9 giây**:\n\n• **${vm4.name}** (*${vm4.priceFormatted}*): Thiết kế Coupé 2 cửa cơ bắp, mui sợi carbon CFRP trần, trưng bày mới 100%.\n• **${vm3.name}** (*${vm3.priceFormatted}*): Huyền thoại M Sedan 4 cửa 5 chỗ thực dụng (${vm3.conditionLabel}).\n• Ngoài ra còn có **${vz4.name}** (*${vz4.priceFormatted}*) mui trần 340 HP cho những buổi dạo phố cuối tuần.`,
       recommendedModels: [vm4, vm3, vz4],
       summaryContext:
         'Khách hàng được tư vấn dòng xe hiệu năng cao BMW M4 Competition (G82) và BMW M3 Competition (G80).'
     };
   }
 
+  // Fallback mặc định
   return {
-    text: `Chào mừng Quý khách đến với **BMW CONCIERGE** của **Bavaria Motor House**. Hiện tại salon đang trưng bày **8 tuyệt tác BMW** thuộc 4 phân khúc:\n\n• **Luxury Sedan**: ${v750e.shortName}, ${vi7.shortName}, ${v530i.shortName}\n• **Premium SUV**: ${vx7.shortName} (7 chỗ), ${vx5.shortName} (5 chỗ)\n• **Grand Touring**: ${v840i.shortName}, ${vz4.shortName}\n• **High Performance**: ${vm4.shortName}, ${vm3.shortName}\n\nQuý khách có thể hỏi chi tiết về từng dòng xe, yêu cầu so sánh thông số hoặc nhấn nút bên dưới để **đặt lịch lái thử** trực tiếp cùng chuyên gia sản phẩm của chúng tôi.`,
+    text: `Chào mừng Quý khách đến với **BMW CONCIERGE** của **Bavaria Motor House**. Hiện tại salon đang trưng bày **8 tuyệt tác BMW** thuộc các phân khúc:\n\n• **Luxury Sedan**: ${v750e.shortName}, ${vi7.shortName}, ${v530i.shortName}\n• **Premium SUV**: ${vx7.shortName} (7 chỗ), ${vx5.shortName} (5 chỗ)\n• **Grand Touring**: ${v840i.shortName}, ${vz4.shortName}\n• **High Performance**: ${vm4.shortName}, ${vm3.shortName}\n\nQuý khách có thể bấm vào các câu hỏi gợi ý bên dưới để tra cứu nhanh thông tin trả góp, gói bảo hành BSI, thời gian giao xe hoặc nhấn nút **Đặt lịch lái thử** để trải nghiệm thực tế ngay hôm nay!`,
     recommendedModels: [v750e, vx7, vm4],
     summaryContext:
       'Khách hàng trao đổi cùng trợ lý BMW CONCIERGE để tìm hiểu danh mục xe và đặt lịch lái thử tại Bavaria Motor House.'
@@ -141,7 +259,7 @@ export default function BmwConcierge({
     {
       id: 'welcome-msg',
       role: 'assistant',
-      text: 'Kính chào Quý khách đến với **BAVARIA MOTOR HOUSE**. Tôi là **BMW CONCIERGE** — Trợ lý tư vấn chuyên biệt của salon.\n\nTôi có thể hỗ trợ Quý khách đối chiếu thông số kỹ thuật, lựa chọn mẫu BMW theo phong cách di chuyển hoặc sắp xếp lịch hẹn lái thử riêng tư.',
+      text: 'Kính chào Quý khách đến với **BAVARIA MOTOR HOUSE**. Tôi là **BMW CONCIERGE** — Cố vấn bán hàng AI chuyên biệt của salon.\n\nTôi sẵn sàng giải đáp mọi thắc mắc về giá bán, chính sách trả góp ngân hàng, gói bảo hành BSI, chi phí lăn bánh hoặc sắp xếp lịch hẹn lái thử tận nơi.\n\n💡 *Quý khách có thể nhấn nhanh vào các câu hỏi thường gặp bên dưới để nhận câu trả lời ngay:*',
       recommendedModels: [BAVARIA_VEHICLES[0], BAVARIA_VEHICLES[1]]
     }
   ]);
@@ -197,7 +315,7 @@ export default function BmwConcierge({
       {
         id: `welcome-${Date.now()}`,
         role: 'assistant',
-        text: 'Cuộc trò chuyện đã được làm mới. Quý khách cần **BMW CONCIERGE** tư vấn dòng Sedan, SUV hay dòng hiệu năng cao BMW M hôm nay?',
+        text: 'Cuộc trò chuyện đã được làm mới. Quý khách có thể bấm nhanh vào các câu hỏi thường gặp bên dưới (trả góp, bảo hành BSI, thời gian giao xe, so sánh các phiên bản...) để **BMW CONCIERGE** hỗ trợ ngay!',
         recommendedModels: [BAVARIA_VEHICLES[0], BAVARIA_VEHICLES[1]]
       }
     ]);
@@ -205,15 +323,22 @@ export default function BmwConcierge({
 
   const renderFormattedText = (text) => {
     return text.split('\n').map((line, lineIdx) => {
-      const parts = line.split(/(\*\*.*?\*\*)/g);
+      const parts = line.split(/(\*\*.*?\*\*|\*[^*]+?\*)/g);
       return (
-        <p key={lineIdx} className={lineIdx > 0 ? 'mt-2' : ''}>
+        <p key={lineIdx} className={lineIdx > 0 ? 'mt-1.5' : ''}>
           {parts.map((part, idx) => {
             if (part.startsWith('**') && part.endsWith('**')) {
               return (
                 <strong key={idx} className="font-semibold text-[#F4F5F6]">
                   {part.slice(2, -2)}
                 </strong>
+              );
+            }
+            if (part.startsWith('*') && part.endsWith('*')) {
+              return (
+                <em key={idx} className="italic text-[#93C5FD]">
+                  {part.slice(1, -1)}
+                </em>
               );
             }
             return <span key={idx}>{part}</span>;
@@ -438,19 +563,23 @@ export default function BmwConcierge({
           </div>
 
           <div
-            className="px-3.5 py-2.5 border-t overflow-x-auto flex items-center gap-2 shrink-0"
+            className="px-3.5 py-2 border-t overflow-x-auto flex items-center gap-2 shrink-0 no-scrollbar"
             style={{ backgroundColor: '#15191F', borderColor: '#303740' }}
           >
+            <span className="text-[10px] uppercase font-semibold text-[#60A5FA] tracking-wider shrink-0 mr-1 flex items-center gap-1 select-none">
+              <Sparkles className="w-3 h-3 text-[#0078D6]" />
+              <span>Gợi ý:</span>
+            </span>
             {SUGGESTED_QUESTIONS.map((suggestion) => (
               <button
                 key={suggestion}
                 type="button"
                 onClick={() => handleSendQuery(suggestion)}
-                className="shrink-0 px-3 py-1.5 rounded-full text-[11px] border transition-colors whitespace-nowrap cursor-pointer"
+                className="shrink-0 px-3 py-1.5 rounded-full text-[11px] font-medium border transition-all whitespace-nowrap cursor-pointer hover:border-[#0078D6] hover:text-white hover:bg-[#0078D6]/15 hover:scale-[1.02]"
                 style={{
                   backgroundColor: '#0B0D10',
                   borderColor: '#303740',
-                  color: '#929BA6'
+                  color: '#CBD5E1'
                 }}
               >
                 {suggestion}
