@@ -13,7 +13,9 @@
 import { BAVARIA_VEHICLES } from '../data/bavariaVehicles';
 
 const BAVARIA_LEADS_STORAGE_KEY = 'bavaria_showroom_leads_v1';
-const AUTOLEAD_BACKEND_ORIGIN = 'http://localhost:5173';
+const urlParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
+const customBackend = urlParams?.get('backend');
+const AUTOLEAD_BACKEND_ORIGIN = customBackend || 'http://localhost:5173';
 
 export const BAVARIA_TIME_SLOTS = [
   '09:00 - 10:30',
@@ -217,9 +219,10 @@ export async function submitBavariaTestDriveBooking(payload) {
   }
 
   // 3. Also update localStorage CRM cache if accessed on same domain
+  let crmItem = null;
   try {
     const existingCrm = JSON.parse(localStorage.getItem('autolead_crm_leads_v1') || '[]');
-    const crmItem = {
+    crmItem = {
       id: backendLeadId || contractRecord.id,
       customerName: contractRecord.customer_name,
       phone: contractRecord.phone,
@@ -253,6 +256,34 @@ export async function submitBavariaTestDriveBooking(payload) {
     );
   } catch {
     // Ignore
+  }
+
+  // 4. Dispatch Cross-Window Event (postMessage) & BroadcastChannel for real-time CRM updates
+  try {
+    const syncMessage = {
+      type: 'AUTOLEAD_LEAD_SYNC',
+      source: 'bavaria_showroom',
+      timestamp: Date.now(),
+      record: contractRecord,
+      crmLead: crmItem
+    };
+
+    // Send to parent window if inside an iframe on AutoLead Systems
+    if (typeof window !== 'undefined' && window.parent && window.parent !== window) {
+      window.parent.postMessage(syncMessage, '*');
+    }
+    // Send to opener window if opened via window.open from AutoLead Systems
+    if (typeof window !== 'undefined' && window.opener && !window.opener.closed) {
+      window.opener.postMessage(syncMessage, '*');
+    }
+    // Send via BroadcastChannel across all browser tabs
+    if (typeof BroadcastChannel !== 'undefined') {
+      const bc = new BroadcastChannel('autolead_sync_channel');
+      bc.postMessage(syncMessage);
+      bc.close();
+    }
+  } catch (crossErr) {
+    console.warn('Cross-window sync dispatch warning:', crossErr);
   }
 
   return {
