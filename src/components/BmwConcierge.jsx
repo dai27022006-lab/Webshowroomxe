@@ -11,31 +11,60 @@ import {
 import { BAVARIA_VEHICLES } from '../data/bavariaVehicles';
 
 const SUGGESTED_QUESTIONS = [
-  '🚗 Tư vấn xe BMW phù hợp cho gia đình',
-  '💳 Chính sách trả góp & Lãi suất vay',
-  '🛡️ Gói bảo hành 5 năm & Bảo dưỡng BSI',
-  '⏱️ Thời gian giao xe & Xe có sẵn giao ngay',
-  '📝 Thủ tục đăng ký lái thử tận nơi',
-  '⚖️ So sánh BMW X5 và BMW X7',
-  '👔 Sedan doanh nhân: 5 Series & 7 Series',
-  '⚡ Tìm hiểu xe thuần điện BMW i7',
-  '🏁 Dòng thể thao hiệu năng cao M3 & M4',
-  '💰 Chi phí lăn bánh & Ưu đãi trước bạ',
-  '🎯 Tư vấn chọn xe theo mức ngân sách'
+  'Tư vấn mẫu BMW phù hợp cho gia đình',
+  'So sánh BMW X5 và BMW X7',
+  'Chính sách trả góp & Lãi suất vay',
+  'Gói bảo hành 5 năm & Bảo dưỡng BSI',
+  'Thời gian giao xe & Xe có sẵn giao ngay',
+  'Thủ tục đăng ký lái thử tận nơi',
+  'Sedan doanh nhân: 5 Series & 7 Series',
+  'Tìm hiểu xe thuần điện BMW i7',
+  'Dòng thể thao hiệu năng cao M3 & M4',
+  'Chi phí lăn bánh & Ưu đãi trước bạ',
+  'Tư vấn chọn xe theo mức ngân sách'
 ];
 
 function buildConciergeReply(rawQuery) {
-  const q = rawQuery.toLowerCase().trim();
+  const q = (rawQuery || '').toLowerCase().trim();
 
-  const v750e = BAVARIA_VEHICLES.find((v) => v.id === 'bmw-750e-g70');
-  const vi7 = BAVARIA_VEHICLES.find((v) => v.id === 'bmw-i7-xdrive60-g70');
-  const vx7 = BAVARIA_VEHICLES.find((v) => v.id === 'bmw-x7-g07-lci');
-  const vx5 = BAVARIA_VEHICLES.find((v) => v.id === 'bmw-x5-g05-lci');
-  const v530i = BAVARIA_VEHICLES.find((v) => v.id === 'bmw-530i-g60');
-  const v840i = BAVARIA_VEHICLES.find((v) => v.id === 'bmw-840i-gc-g16');
-  const vm4 = BAVARIA_VEHICLES.find((v) => v.id === 'bmw-m4-comp-g82');
-  const vm3 = BAVARIA_VEHICLES.find((v) => v.id === 'bmw-m3-comp-g80');
-  const vz4 = BAVARIA_VEHICLES.find((v) => v.id === 'bmw-z4-m40i-g29');
+  // Robust vehicle lookups with fallbacks (fixing exact ID matching in data)
+  const v750e = BAVARIA_VEHICLES.find((v) => v.id === 'bmw-750e-g70' || v.family === '7 Series') || BAVARIA_VEHICLES[0];
+  const vi7 = BAVARIA_VEHICLES.find((v) => v.id === 'bmw-i7-xdrive60-g70') || BAVARIA_VEHICLES[4] || BAVARIA_VEHICLES[0];
+  const vx7 = BAVARIA_VEHICLES.find((v) => v.id === 'bmw-x7-m60i-g07' || v.id === 'bmw-x7-g07-lci' || v.family === 'X7') || BAVARIA_VEHICLES[1] || BAVARIA_VEHICLES[0];
+  const vx5 = BAVARIA_VEHICLES.find((v) => v.id === 'bmw-x5-g05-lci' || v.family === 'X5') || BAVARIA_VEHICLES[3] || BAVARIA_VEHICLES[0];
+  const v530i = BAVARIA_VEHICLES.find((v) => v.id === 'bmw-530i-g60' || v.family === '5 Series') || BAVARIA_VEHICLES[5] || BAVARIA_VEHICLES[0];
+  const v840i = BAVARIA_VEHICLES.find((v) => v.id === 'bmw-840i-gc-g16' || v.family === '8 Series') || BAVARIA_VEHICLES[6] || BAVARIA_VEHICLES[0];
+  const vm4 = BAVARIA_VEHICLES.find((v) => v.id === 'bmw-m4-comp-g82' || v.family === 'M Series') || BAVARIA_VEHICLES[2] || BAVARIA_VEHICLES[0];
+  const vm3 = BAVARIA_VEHICLES.find((v) => v.id === 'bmw-m3-comp-g80') || BAVARIA_VEHICLES[7] || BAVARIA_VEHICLES[0];
+  const vz4 = BAVARIA_VEHICLES.find((v) => v.id === 'bmw-z4-m40i-g29' || v.family === 'Z4') || BAVARIA_VEHICLES[8] || BAVARIA_VEHICLES[0];
+
+  // 1. CÂU HỎI GỢI Ý 2: So sánh BMW X5 và BMW X7 (Check first before generic SUV/family)
+  if (
+    (q.includes('x5') && q.includes('x7')) ||
+    (q.includes('so sánh') && (q.includes('x5') || q.includes('x7') || q.includes('suv') || q.includes('sav')))
+  ) {
+    return {
+      text: `**SO SÁNH CHI TIẾT GIỮA BMW X5 VÀ BMW X7 TẠI BAVARIA MOTOR HOUSE:**\n\nCả hai mẫu SAV đều sử dụng khối động cơ 3.0L I6 TwinPower Turbo kết hợp Mild-Hybrid 48V (381 HP / 540 Nm), hộp số tự động 8 cấp Steptronic và hệ dẫn động 4 bánh toàn thời gian xDrive, nhưng được tinh chỉnh cho hai mục đích sử dụng khác biệt:\n\n• **${vx5.name}** (*${vx5.priceFormatted}*):\n  - **Cấu hình**: **5 chỗ ngồi** linh hoạt, khoang hành lý 650L (mở rộng 1.870L).\n  - **Khả năng vận hành**: Chiều dài 4.935 mm vừa vặn, tăng tốc 0–100 km/h chỉ **5,4 giây** — cực kỳ lanh lẹ trong đô thị và lý tưởng cho chủ nhân yêu thích tự cầm lái hàng ngày.\n\n• **${vx7.name}** (*${vx7.priceFormatted}*):\n  - **Cấu hình**: **7 chỗ Full-Size** với 3 hàng ghế rộng rãi cho người lớn.\n  - **Tiện nghi vượt trội**: Hệ thống treo khí nén 2 trục tự động cân bằng siêu êm ái, cửa sổ trời toàn cảnh Panorama Sky Lounge 15.000 điểm sáng và đèn pha pha lê Swarovski Iconic Glow — chuẩn mực hoàn hảo cho gia đình 3 thế hệ hoặc những chuyến công tác xa.\n\nQuý khách có thể bấm nút bên dưới để **Đặt lịch lái thử** trải nghiệm thực tế cả hai mẫu xe ngay hôm nay!`,
+      recommendedModels: [vx7, vx5],
+      summaryContext:
+        'Khách hàng so sánh chi tiết giữa BMW X5 (G05 LCI) và BMW X7 (G07 LCI) qua BMW CONCIERGE.'
+    };
+  }
+
+  // 2. CÂU HỎI GỢI Ý 1: Tư vấn mẫu BMW phù hợp cho gia đình
+  if (
+    q.includes('gia đình') ||
+    q.includes('gia dinh') ||
+    q.includes('xe gia đình') ||
+    (q.includes('phù hợp') && (q.includes('mẫu') || q.includes('xe')))
+  ) {
+    return {
+      text: `**TƯ VẤN MẪU XE BMW HOÀN HẢO CHO GIA ĐÌNH TẠI BAVARIA MOTOR HOUSE:**\n\nĐối với nhu cầu phục vụ gia đình từ 4 đến 7 thành viên, Bavaria Motor House trân trọng giới thiệu hai mẫu SAV gầm cao đa dụng hàng đầu đang trưng bày tại salon:\n\n1. **${vx7.name}** — Giá tham khảo: **${vx7.priceFormatted}**\n   • **Cấu hình**: 7 chỗ Full-Size | Động cơ: ${vx7.engine}\n   • **Điểm nổi bật**: Không gian 3 hàng ghế rộng rãi, hệ thống điều hòa 5 vùng độc lập, rèm che nắng chỉnh điện, treo khí nén 2 trục êm ái triệt tiêu rung chấn đường xa — lý tưởng cho gia đình đa thế hệ.\n\n2. **${vx5.name}** — Giá tham khảo: **${vx5.priceFormatted}**\n   • **Cấu hình**: 5 chỗ ngồi linh hoạt | Động cơ: ${vx5.engine}\n   • **Điểm nổi bật**: Khoang hành lý rộng 650 lít đáp ứng trọn vẹn nhu cầu dã ngoại cuối tuần, kích thước lanh lẹ dễ xoay xở trong đô thị.\n\nQuý khách có thể đưa cả gia đình đến salon để trải nghiệm trực tiếp độ êm ái của hàng ghế và tính năng an toàn chủ động!`,
+      recommendedModels: [vx7, vx5],
+      summaryContext:
+        'Khách hàng yêu cầu tư vấn mẫu xe BMW phù hợp cho gia đình (BMW X7 và BMW X5).'
+    };
+  }
 
   // 1. Trả góp & Hỗ trợ tài chính / Ngân hàng / Lãi suất
   if (
@@ -297,17 +326,29 @@ export default function BmwConcierge({
     setIsTyping(true);
 
     setTimeout(() => {
-      const reply = buildConciergeReply(trimmed);
-      const botMsg = {
-        id: `bot-${Date.now()}`,
-        role: 'assistant',
-        text: reply.text,
-        recommendedModels: reply.recommendedModels || [],
-        summaryContext: reply.summaryContext
-      };
-      setMessages((prev) => [...prev, botMsg]);
-      setIsTyping(false);
-    }, 450);
+      try {
+        const reply = buildConciergeReply(trimmed);
+        const botMsg = {
+          id: `bot-${Date.now()}`,
+          role: 'assistant',
+          text: reply.text,
+          recommendedModels: reply.recommendedModels || [],
+          summaryContext: reply.summaryContext
+        };
+        setMessages((prev) => [...prev, botMsg]);
+      } catch (err) {
+        console.error('Concierge reply error:', err);
+        const fallbackBotMsg = {
+          id: `bot-${Date.now()}`,
+          role: 'assistant',
+          text: 'Kính chào Quý khách! Chuyên viên tư vấn Bavaria Motor House sẵn sàng hỗ trợ Quý khách giải đáp thắc mắc và sắp xếp lịch lái thử trực tiếp.',
+          recommendedModels: [BAVARIA_VEHICLES[0], BAVARIA_VEHICLES[1]]
+        };
+        setMessages((prev) => [...prev, fallbackBotMsg]);
+      } finally {
+        setIsTyping(false);
+      }
+    }, 250);
   };
 
   const handleResetChat = () => {
@@ -350,13 +391,13 @@ export default function BmwConcierge({
 
   return (
     <>
-      {/* Floating Launcher Button */}
-      <div className="fixed bottom-5 right-5 z-[80]">
+      {/* Floating Launcher Button - Mobile optimized */}
+      <div className="fixed bottom-3 right-3 sm:bottom-6 sm:right-6 z-[80]">
         {!isOpen && (
           <button
             type="button"
             onClick={() => setIsOpen(true)}
-            className="group flex items-center gap-3 px-5 py-3.5 rounded-full border border-white/20 shadow-2xl transition-all duration-300 hover:scale-[1.02] cursor-pointer"
+            className="group flex items-center gap-2.5 sm:gap-3 px-3.5 py-2.5 sm:px-5 sm:py-3.5 rounded-full border border-white/20 shadow-2xl transition-all duration-300 hover:scale-[1.02] active:scale-95 cursor-pointer"
             style={{
               backgroundColor: '#0B0D10',
               color: '#F4F5F6',
@@ -365,20 +406,20 @@ export default function BmwConcierge({
             aria-label="Mở trợ lý BMW CONCIERGE"
           >
             <div
-              className="w-9 h-9 rounded-full flex items-center justify-center border shrink-0"
+              className="w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center border shrink-0"
               style={{
                 backgroundColor: 'rgba(0, 120, 214, 0.2)',
                 borderColor: '#0078D6',
                 color: '#93C5FD'
               }}
             >
-              <Sparkles className="w-4 h-4 text-[#0078D6]" />
+              <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#0078D6]" />
             </div>
             <div className="text-left pr-1">
-              <div className="text-[10px] uppercase tracking-[0.22em] text-[#929BA6] leading-tight">
+              <div className="text-[9px] sm:text-[10px] uppercase tracking-[0.2em] text-[#929BA6] leading-tight">
                 AI SALES ADVISORY
               </div>
-              <div className="text-xs sm:text-sm font-semibold tracking-[0.14em] text-[#F4F5F6]">
+              <div className="text-[11px] sm:text-xs font-semibold tracking-[0.14em] text-[#F4F5F6]">
                 BMW CONCIERGE
               </div>
             </div>
@@ -386,10 +427,10 @@ export default function BmwConcierge({
         )}
       </div>
 
-      {/* Chat Window Panel */}
+      {/* Chat Window Panel - Mobile optimized with inset-x-2 */}
       {isOpen && (
         <div
-          className="fixed bottom-4 right-3 sm:bottom-6 sm:right-6 z-[85] w-[calc(100vw-24px)] sm:w-[430px] max-h-[82vh] flex flex-col rounded-2xl border shadow-2xl overflow-hidden"
+          className="fixed inset-x-2 bottom-2 sm:inset-x-auto sm:right-6 sm:bottom-6 z-[85] sm:w-[420px] h-[85vh] sm:h-[620px] max-h-[92vh] flex flex-col rounded-2xl border shadow-2xl overflow-hidden"
           style={{
             backgroundColor: '#15191F',
             borderColor: '#303740',

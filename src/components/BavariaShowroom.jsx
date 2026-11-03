@@ -34,6 +34,7 @@ import {
   BAVARIA_SERVICES
 } from '../data/bavariaVehicles';
 import BavariaBookingModal from './BavariaBookingModal';
+import BmwConcierge from './BmwConcierge';
 import {
   submitBavariaTestDriveBooking,
   isValidVietnamPhone,
@@ -90,6 +91,9 @@ export default function BavariaShowroom() {
     leadSource: 'website_booking',
     conversationSummary: ''
   });
+
+  // External prompt passed to BMW Concierge
+  const [conciergePrompt, setConciergePrompt] = useState(null);
 
   // Contact Page Inquiry State
   const [contactForm, setContactForm] = useState({
@@ -272,7 +276,7 @@ export default function BavariaShowroom() {
   };
 
   const v750e = BAVARIA_VEHICLES.find((v) => v.id === 'bmw-750e-g70') || BAVARIA_VEHICLES[0];
-  const vx7 = BAVARIA_VEHICLES.find((v) => v.id === 'bmw-x7-g07-lci') || BAVARIA_VEHICLES[1];
+  const vx7 = BAVARIA_VEHICLES.find((v) => v.id === 'bmw-x7-m60i-g07' || v.family === 'X7') || BAVARIA_VEHICLES[1];
   const vm4 = BAVARIA_VEHICLES.find((v) => v.id === 'bmw-m4-comp-g82') || BAVARIA_VEHICLES[2];
   const vx5 = BAVARIA_VEHICLES.find((v) => v.id === 'bmw-x5-g05-lci') || BAVARIA_VEHICLES[3];
   const vi7 = BAVARIA_VEHICLES.find((v) => v.id === 'bmw-i7-xdrive60-g70') || BAVARIA_VEHICLES[4];
@@ -1695,15 +1699,15 @@ export default function BavariaShowroom() {
                 <button
                   type="button"
                   onClick={() =>
-                    handleOpenBookingModal({
-                      vehicleModel: selectedVehicle.name,
-                      leadSource: 'price_quote_inquiry'
+                    setConciergePrompt({
+                      id: Date.now(),
+                      text: `Tư vấn chuyên sâu về mẫu ${selectedVehicle.name}`
                     })
                   }
                   className="w-full py-3.5 px-6 rounded-full text-xs sm:text-sm font-medium text-[#11151C] border border-gray-300 hover:border-black bg-white flex items-center justify-center gap-2 transition-colors cursor-pointer"
                 >
                   <Sparkles className="w-4 h-4 text-[#0078D6]" />
-                  <span>Yêu cầu tư vấn báo giá xe này</span>
+                  <span>Hỏi Trợ lý BMW Concierge về xe này</span>
                 </button>
               </div>
             </div>
@@ -2352,10 +2356,15 @@ export default function BavariaShowroom() {
                 <li>
                   <button
                     type="button"
-                    onClick={() => setActivePage('collection')}
+                    onClick={() =>
+                      setConciergePrompt({
+                        id: Date.now(),
+                        text: 'So sánh BMW X5 và BMW X7'
+                      })
+                    }
                     className="hover:text-white cursor-pointer"
                   >
-                    Bộ sưu tập xe sẵn sàng lái thử
+                    Trợ lý AI BMW Concierge
                   </button>
                 </li>
                 <li>
@@ -2447,6 +2456,19 @@ export default function BavariaShowroom() {
         initialVehicleModel={bookingModalConfig.vehicleModel}
         leadSource={bookingModalConfig.leadSource}
         conversationSummary={bookingModalConfig.conversationSummary}
+      />
+
+      <BmwConcierge
+        onTriggerBooking={({ vehicleModel, leadSource, conversationSummary }) =>
+          handleOpenBookingModal({
+            vehicleModel,
+            leadSource,
+            conversationSummary
+          })
+        }
+        onViewVehicleDetail={(vehicle) => handleOpenVehicleDetail(vehicle)}
+        externalPromptRequest={conciergePrompt}
+        onClearExternalPrompt={() => setConciergePrompt(null)}
       />
     </div>
   );
