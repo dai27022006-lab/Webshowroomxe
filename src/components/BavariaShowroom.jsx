@@ -34,7 +34,6 @@ import {
   BAVARIA_SERVICES
 } from '../data/bavariaVehicles';
 import BavariaBookingModal from './BavariaBookingModal';
-import BmwConcierge from './BmwConcierge';
 import {
   submitBavariaTestDriveBooking,
   isValidVietnamPhone,
@@ -91,9 +90,6 @@ export default function BavariaShowroom() {
     leadSource: 'website_booking',
     conversationSummary: ''
   });
-
-  // External prompt passed to BMW Concierge
-  const [conciergePrompt, setConciergePrompt] = useState(null);
 
   // Contact Page Inquiry State
   const [contactForm, setContactForm] = useState({
@@ -1699,15 +1695,15 @@ export default function BavariaShowroom() {
                 <button
                   type="button"
                   onClick={() =>
-                    setConciergePrompt({
-                      id: Date.now(),
-                      text: `Tư vấn chuyên sâu về mẫu ${selectedVehicle.name}`
+                    handleOpenBookingModal({
+                      vehicleModel: selectedVehicle.name,
+                      leadSource: 'price_quote_inquiry'
                     })
                   }
                   className="w-full py-3.5 px-6 rounded-full text-xs sm:text-sm font-medium text-[#11151C] border border-gray-300 hover:border-black bg-white flex items-center justify-center gap-2 transition-colors cursor-pointer"
                 >
                   <Sparkles className="w-4 h-4 text-[#0078D6]" />
-                  <span>Hỏi Trợ lý BMW Concierge về xe này</span>
+                  <span>Yêu cầu tư vấn báo giá xe này</span>
                 </button>
               </div>
             </div>
@@ -2356,15 +2352,10 @@ export default function BavariaShowroom() {
                 <li>
                   <button
                     type="button"
-                    onClick={() =>
-                      setConciergePrompt({
-                        id: Date.now(),
-                        text: 'So sánh BMW X5 và BMW X7'
-                      })
-                    }
+                    onClick={() => setActivePage('collection')}
                     className="hover:text-white cursor-pointer"
                   >
-                    Trợ lý AI BMW Concierge
+                    Bộ sưu tập xe sẵn sàng lái thử
                   </button>
                 </li>
                 <li>
@@ -2456,19 +2447,6 @@ export default function BavariaShowroom() {
         initialVehicleModel={bookingModalConfig.vehicleModel}
         leadSource={bookingModalConfig.leadSource}
         conversationSummary={bookingModalConfig.conversationSummary}
-      />
-
-      <BmwConcierge
-        onTriggerBooking={({ vehicleModel, leadSource, conversationSummary }) =>
-          handleOpenBookingModal({
-            vehicleModel,
-            leadSource,
-            conversationSummary
-          })
-        }
-        onViewVehicleDetail={(vehicle) => handleOpenVehicleDetail(vehicle)}
-        externalPromptRequest={conciergePrompt}
-        onClearExternalPrompt={() => setConciergePrompt(null)}
       />
     </div>
   );
