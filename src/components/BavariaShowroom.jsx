@@ -411,6 +411,21 @@ export default function BavariaShowroom() {
               <span>Đặt lịch lái thử</span>
             </button>
 
+            {/* Quick Back to AutoLead */}
+            <a
+              href="https://dai27022006-lab.github.io/autolead-systems111/#/"
+              onClick={(e) => {
+                if (typeof window !== 'undefined' && window.parent && window.parent !== window) {
+                  e.preventDefault();
+                  window.parent.location.hash = '#/';
+                }
+              }}
+              className="hidden md:inline-flex items-center gap-1 px-3.5 py-2 rounded-full text-xs font-semibold text-slate-200 hover:text-white bg-white/10 hover:bg-white/20 border border-white/20 transition-all cursor-pointer whitespace-nowrap"
+              title="Quay lại trang chủ AutoLead Systems"
+            >
+              <span>← Về Trang Chủ</span>
+            </a>
+
             <button
               type="button"
               onClick={() => setMobileMenuOpen((prev) => !prev)}
@@ -455,6 +470,19 @@ export default function BavariaShowroom() {
               <Calendar className="w-4 h-4" />
               <span>Đặt lịch lái thử ngay</span>
             </button>
+
+            <a
+              href="https://dai27022006-lab.github.io/autolead-systems111/#/"
+              onClick={(e) => {
+                if (typeof window !== 'undefined' && window.parent && window.parent !== window) {
+                  e.preventDefault();
+                  window.parent.location.hash = '#/';
+                }
+              }}
+              className="w-full py-3 rounded-full text-xs font-semibold text-slate-200 bg-white/10 hover:bg-white/20 border border-white/20 flex items-center justify-center gap-1.5 transition-colors text-center"
+            >
+              <span>← Quay về Trang chủ AutoLead</span>
+            </a>
           </div>
         )}
       </header>
