@@ -40,6 +40,7 @@ import {
   isValidVietnamPhone,
   BAVARIA_TIME_SLOTS
 } from '../services/bavariaAutoLeadAdapter';
+import { getAssetUrl } from '../utils/asset';
 
 const NAV_ITEMS = [
   { id: 'home', label: 'Các dòng xe', labelEn: 'Models' },
@@ -466,8 +467,8 @@ export default function BavariaShowroom() {
             {heroMode === 'video' ? (
               <video
                 ref={heroVideoRef}
-                src="/bavaria/bmw-hero-vision.webm"
-                poster="/bavaria/bmw-x7-main.jpg"
+                src={getAssetUrl('/bavaria/bmw-hero-vision.webm')}
+                poster={getAssetUrl('/bavaria/bmw-x7-main.jpg')}
                 autoPlay
                 loop
                 muted={isHeroMuted}
@@ -476,13 +477,13 @@ export default function BavariaShowroom() {
               />
             ) : heroMode === 'x7' ? (
               <img
-                src="/bavaria/bmw-x7-main.jpg"
+                src={getAssetUrl('/bavaria/bmw-x7-main.jpg')}
                 alt="BMW X7 LCI Flagship SAV"
                 className="absolute inset-0 w-full h-full object-cover object-center animate-fadeIn"
               />
             ) : (
               <img
-                src="/bavaria/bmw-7-series-side.jpg"
+                src={getAssetUrl('/bavaria/bmw-7-series-side.jpg')}
                 alt="BMW 7 Series G70 Flagship Sedan"
                 className="absolute inset-0 w-full h-full object-cover object-center animate-fadeIn"
               />
@@ -920,21 +921,21 @@ export default function BavariaShowroom() {
                     powertrainFilter === 'electrified'
                       ? 'BMW i7 xDrive60 • BMW 750e PHEV'
                       : 'BMW 7 Series • BMW i7 • BMW 5 Series',
-                  img: '/bavaria/bmw-5-series-main.jpg'
+                  img: getAssetUrl('/bavaria/bmw-5-series-main.jpg')
                 },
                 {
                   category: 'Premium SUV',
                   label: 'Khám phá',
                   title: 'Xe địa hình / SUV',
                   subtitle: 'BMW X7 LCI (7 chỗ) • BMW X5 LCI (5 chỗ)',
-                  img: '/bavaria/bmw-x7-main.jpg'
+                  img: getAssetUrl('/bavaria/bmw-x7-main.jpg')
                 },
                 {
                   category: 'High Performance',
                   label: 'Khám phá',
                   title: 'Coupé & BMW M Thể thao',
                   subtitle: 'BMW M4 Competition • BMW M3 • 8 Series • Z4',
-                  img: '/bavaria/bmw-8-series-side.jpg'
+                  img: getAssetUrl('/bavaria/bmw-8-series-side.jpg')
                 }
               ].map((item, idx) => (
                 <div
@@ -1108,8 +1109,8 @@ export default function BavariaShowroom() {
               <div className="group flex flex-col justify-between space-y-4">
                 <div className="relative aspect-[16/10] rounded-xl overflow-hidden bg-black shadow-md">
                   <video
-                    src="/bavaria/bmw-loop-motion.webm"
-                    poster="/bavaria/bmw-m4-main.jpg"
+                    src={getAssetUrl('/bavaria/bmw-loop-motion.webm')}
+                    poster={getAssetUrl('/bavaria/bmw-m4-main.jpg')}
                     autoPlay
                     loop
                     muted
@@ -1158,7 +1159,7 @@ export default function BavariaShowroom() {
               <div className="group flex flex-col justify-between space-y-4">
                 <div className="relative aspect-[16/10] rounded-xl overflow-hidden bg-[#11151C] shadow-md">
                   <img
-                    src="/bavaria/bmw-8-series-side.jpg"
+                    src={getAssetUrl('/bavaria/bmw-8-series-side.jpg')}
                     alt="Dịch vụ tư vấn cá nhân hóa 1:1 tại Bavaria Motor House"
                     className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
                   />
@@ -1221,7 +1222,7 @@ export default function BavariaShowroom() {
               <div className="lg:col-span-7">
                 <div className="rounded-xl overflow-hidden shadow-xl border border-gray-200">
                   <img
-                    src="/bavaria/bmw-interior-dash.jpg"
+                    src={getAssetUrl('/bavaria/bmw-interior-dash.jpg')}
                     alt="Khoang lái BMW Curved Display và dải pha lê Interaction Bar"
                     className="w-full h-[360px] sm:h-[420px] object-cover object-center"
                   />
@@ -1865,7 +1866,7 @@ export default function BavariaShowroom() {
             <div className="lg:col-span-6">
               <div className="rounded-xl border border-gray-200 overflow-hidden bg-white shadow-lg">
                 <img
-                  src="/bavaria/bmw-8-series-side.jpg"
+                  src={getAssetUrl('/bavaria/bmw-8-series-side.jpg')}
                   alt="Không gian trưng bày THE 8 tại Bavaria Motor House"
                   className="w-full h-[380px] object-cover"
                 />

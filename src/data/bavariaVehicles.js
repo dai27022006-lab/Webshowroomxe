@@ -4,6 +4,8 @@
  * Prices & specifications are indicative sample showroom data for demonstration purposes.
  */
 
+import { getAssetUrl } from '../utils/asset';
+
 export const BAVARIA_CATEGORIES = [
   { id: 'all', label: 'Tất Cả Phân Khúc', labelEn: 'All Categories' },
   { id: 'Luxury Sedan', label: 'Luxury Sedan', labelEn: 'Executive & Flagship Sedans' },
@@ -718,3 +720,19 @@ export const BAVARIA_SERVICES = [
     ]
   }
 ];
+
+// Transform image paths dynamically to support subpaths (e.g. GitHub Pages)
+BAVARIA_VEHICLES.forEach((vehicle) => {
+  if (vehicle.images) {
+    if (vehicle.images.main) {
+      vehicle.images.main = getAssetUrl(vehicle.images.main);
+    }
+    if (Array.isArray(vehicle.images.gallery)) {
+      vehicle.images.gallery.forEach((item) => {
+        if (item.url) {
+          item.url = getAssetUrl(item.url);
+        }
+      });
+    }
+  }
+});
